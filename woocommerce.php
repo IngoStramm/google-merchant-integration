@@ -1,0 +1,33 @@
+<?php
+
+add_action( 'woocommerce_thankyou', 'gmi_integration', 10, 1 );
+
+function gmi_integration( $order_id ) {
+
+	if( !$order_id )
+		return;
+
+	$merchant_id = gmi_get_option( 'google_merchant_id' );
+	$order = wc_get_order( $order_id );
+	$customer_email = $order->get_billing_email();
+	$country_code = $order->get_billing_country();
+	$default_estimated_delivery = gmi_get_option( 'gmi_default_estimated_delivery' );
+	if( empty( $default_estimated_delivery ) )
+		$default_estimated_delivery = 0;
+	// $current_date = date( 'Y-m-d' );
+	// $estimated_delivery_date = date( 'Y-m-d', strtotime( '+2 days', strtotime( $current_date ) ) );
+	// gmi_debug( $estimated_delivery_date );
+	// MERCHANT_ID
+	// ORDER_ID
+	// CUSTOMER_EMAIL
+	// COUNTRY_CODE
+	// ESTIMATED_DELIVERY_DATE
+	// OPT_IN_STYLE (optional)
+	?>
+	<input type="hidden" id="merchant_id" value="<?php echo $merchant_id; ?>">
+	<input type="hidden" id="order_id" value="<?php echo $order_id; ?>">
+	<input type="hidden" id="customer_email" value="<?php echo $customer_email; ?>">
+	<input type="hidden" id="country_code" value="<?php echo $country_code; ?>">
+	<input type="hidden" id="default_estimated_delivery" value="<?php echo $default_estimated_delivery; ?>">
+	<?php
+}
