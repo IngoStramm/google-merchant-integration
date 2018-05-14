@@ -29,5 +29,61 @@ function gmi_integration( $order_id ) {
 	<input type="hidden" id="customer_email" value="<?php echo $customer_email; ?>">
 	<input type="hidden" id="country_code" value="<?php echo $country_code; ?>">
 	<input type="hidden" id="default_estimated_delivery" value="<?php echo $default_estimated_delivery; ?>">
+
+	<?php
+		$estimated_delivery_date = date( 'Y/m/d', strtotime( '+' . $default_estimated_delivery . ' days' ) );
+		// gmi_debug( $estimated_delivery_date );
+	?>
+
+	<!-- BEGIN GCR Badge Code -->
+	<script src="https://apis.google.com/js/platform.js?onload=renderBadge" async defer>
+	</script>
+
+	<script>
+		window.renderBadge = function() {
+			var ratingBadgeContainer = document.createElement("div");
+			document.body.appendChild(ratingBadgeContainer);
+			window.gapi.load('ratingbadge', function() {
+				window.gapi.ratingbadge.render(
+					ratingBadgeContainer, {
+						"merchant_id": <?php echo $merchant_id; ?>,
+						"position": "BOTTOM_LEFT"
+					});
+			});
+		}
+	</script>
+	<!-- END GCR Badge Code -->	
+
+	<!-- BEGIN GCR Opt-in Module Code -->
+	<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer>
+	</script>
+
+	<script>
+		console.log('pre renderOptIn');
+		window.renderOptIn = function() { 
+			console.log('renderOptIn');
+			window.gapi.load('surveyoptin', function() {
+				console.log('surveyoptin');
+				window.gapi.surveyoptin.render(
+				{
+					"merchant_id": <?php echo $merchant_id; ?>,
+					"order_id": "<?php echo $order_id; ?>",
+					"email": "<?php echo $customer_email ?>",
+					"delivery_country": "<?php echo $country_code ?>",
+					"estimated_delivery_date": "<?php echo $estimated_delivery_date ?>",
+					"opt_in_style": "CENTER_DIALOG"
+				}); 
+			});
+		}
+	</script>
+	<!-- END GCR Opt-in Module Code -->
+
+	<!-- BEGIN GCR Language Code -->
+	<script>
+	  window.___gcfg = {
+	    lang: 'pt_BR'
+	  };
+	</script>
+	<!-- END GCR Language Code -->
 	<?php
 }

@@ -36,10 +36,12 @@ jQuery( function( $ ) {
 		var month = ( ( full_date.getMonth().length + 1 ) === 1 ) ? ( full_date.getMonth() + 1 ) : '0' + ( full_date.getMonth() + 1 );
 		var year = full_date.getFullYear();
 		var estimated_delivery_date = year + '/' + month + '/' + day;
-		console.log('estimated_delivery_date: ' + estimated_delivery_date);
+		console.log('estimated_delivery_date 1: ' + estimated_delivery_date);
 
 		window.renderOptIn = function() { 
+			console.log( 'renderOptIn' );
 			window.gapi.load( 'surveyoptin', function() {
+				console.log( 'load' );
 				window.gapi.surveyoptin.render(
 				{
 					// REQUIRED
@@ -49,9 +51,26 @@ jQuery( function( $ ) {
 					'delivery_country': delivery_country,
 					'estimated_delivery_date': estimated_delivery_date,
 
-					// OPTIONAL
+					// OPTIONALx
 					'opt_in_style': 'BOTTOM_TRAY'
 				}); 
+			});
+		}
+
+		window.renderBadge = function() {
+			console.log('renderBadge');
+			var ratingBadgeContainer = document.createElement("div");
+			document.body.appendChild(ratingBadgeContainer);
+			window.gapi.load('ratingbadge', function() {
+				console.log('ratingbadge');
+				window.gapi.ratingbadge.render(
+					ratingBadgeContainer, {
+						// REQUIRED
+						"merchant_id": merchant_id,
+						// OPTIONAL
+						"position": "BOTTOM_LEFT"
+					}
+				);           
 			});
 		}
 
